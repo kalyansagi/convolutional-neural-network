@@ -66,11 +66,11 @@ classifier.fit_generator(training_set,
 # pip3 install tensorflow
 # pip3 install pillow
 # pip3 install scipy
-from keras.preprocessing import image
+import keras
 import numpy as np
-prediction = image.load('test.jpg',
+prediction = keras.utils.load_img('test.jpg',
                         target_size=(64, 64))
-prediction = image.img_to_array(prediction)
+prediction = keras.utils.img_to_array(prediction)
 prediction = np.expand_dims(prediction, axis=0)
 result = classifier.predict(prediction)
 training_set.class_indices
