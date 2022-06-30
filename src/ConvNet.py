@@ -58,7 +58,25 @@ test_set = test_datagen.flow_from_directory('test_set',
                                             batch_size=32,
                                             class_mode='binary')
 classifier.fit_generator(training_set,
-                    steps_per_epoch=8000,
+                    steps_per_epoch=(8000/32),
                     epochs=25,
                     validation_data=test_set,
-                    validation_steps=2000)
+                    validation_steps=(2000/32))
+
+# pip3 install tensorflow
+# pip3 install pillow
+# pip3 install scipy
+from keras.preprocessing import image
+import numpy as np
+prediction = image.load('test.jpg',
+                        target_size=(64, 64))
+prediction = image.img_to_array(prediction)
+prediction = np.expand_dims(prediction, axis=0)
+result = classifier.predict(prediction)
+training_set.class_indices
+if result[0][0] == 1:
+    print('My model predicted test.jpg to be a Dog')
+else:
+    print('My model predicted test.jpg to be a Cat')
+
+
