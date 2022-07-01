@@ -7,6 +7,11 @@
 # Installing Tensorflow
 # Installing Keras
 
+
+# pip3 install tensorflow
+# pip3 install pillow
+# pip3 install scipy
+
 # Part 1 - Building the ConvNet
 
 # Importing the Keras libraries and packages
@@ -36,33 +41,29 @@ classifier.add(Flatten())
 classifier.add(Dense(units=128, activation='relu'))
 classifier.add(Dense(units=1, activation='sigmoid'))
 
-
 # Compiling the ConvNet
 classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 # Part 2 - Fitting the ConvNet to the Images
 from keras.preprocessing.image import ImageDataGenerator
 
-train_datagen = ImageDataGenerator(
+train_imagedatagenerator = ImageDataGenerator(
     rescale=1. / 255,
     shear_range=0.2,
     zoom_range=0.2,
     horizontal_flip=True)
-test_datagen = ImageDataGenerator(rescale=1. / 255)
-training_set = train_datagen.flow_from_directory('training_set',
-                                                 target_size=(64, 64),
-                                                 batch_size=32,
-                                                 class_mode='binary')
-test_set = test_datagen.flow_from_directory('test_set',
-                                            target_size=(64, 64),
-                                            batch_size=32,
-                                            class_mode='binary')
-classifier.fit_generator(training_set,
+test_imagedatagenerator = ImageDataGenerator(rescale=1. / 255)
+training_dataset = train_imagedatagenerator.flow_from_directory('training_set',
+                                                                target_size=(64, 64),
+                                                                batch_size=32,
+                                                                class_mode='binary')
+testing_dataset = test_imagedatagenerator.flow_from_directory('test_set',
+                                                              target_size=(64, 64),
+                                                              batch_size=32,
+                                                              class_mode='binary')
+classifier.fit_generator(training_dataset,
                          steps_per_epoch=(8000 / 32),
                          epochs=25,
-                         validation_data=test_set)
-# classifier.fit(training_set, epochs=25, batch_size=8000, validation_data=test_set)
-
-# pip3 install tensorflow
-# pip3 install pillow
-# pip3 install scipy
+                         validation_data=testing_dataset,
+                         validation_steps=(2000 / 32)
+                         )
