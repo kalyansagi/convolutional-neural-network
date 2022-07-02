@@ -55,15 +55,15 @@ train_imagedatagenerator = ImageDataGenerator(
 test_imagedatagenerator = ImageDataGenerator(rescale=1. / 255)
 training_dataset = train_imagedatagenerator.flow_from_directory('training_set',
                                                                 target_size=(64, 64),
-                                                                batch_size=32,
+                                                                batch_size=100,
                                                                 class_mode='binary')
 testing_dataset = test_imagedatagenerator.flow_from_directory('test_set',
                                                               target_size=(64, 64),
-                                                              batch_size=32,
+                                                              batch_size=100,
                                                               class_mode='binary')
-classifier.fit_generator(training_dataset,
-                         steps_per_epoch=(8000 / 32),
-                         epochs=25,
-                         validation_data=testing_dataset,
-                         validation_steps=(2000 / 32)
-                         )
+classifier.fit(testing_dataset,
+               steps_per_epoch=(2000 / 100),
+               epochs=35
+               # validation_data=training_dataset
+               # validation_steps=(8000 / 100)
+               )
