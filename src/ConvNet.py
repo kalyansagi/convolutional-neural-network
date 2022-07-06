@@ -55,15 +55,34 @@ train_imagedatagenerator = ImageDataGenerator(
 test_imagedatagenerator = ImageDataGenerator(rescale=1. / 255)
 training_dataset = train_imagedatagenerator.flow_from_directory('training_set',
                                                                 target_size=(64, 64),
-                                                                batch_size=100,
+                                                                batch_size=32,
                                                                 class_mode='binary')
 testing_dataset = test_imagedatagenerator.flow_from_directory('test_set',
                                                               target_size=(64, 64),
-                                                              batch_size=100,
+                                                              batch_size=32,
                                                               class_mode='binary')
-classifier.fit(testing_dataset,
-               steps_per_epoch=(2000 / 100),
-               epochs=35
-               # validation_data=training_dataset
-               # validation_steps=(8000 / 100)
-               )
+history = classifier.fit(training_dataset,
+                         steps_per_epoch=(8000 / 32),
+                         epochs=75,
+                         validation_data=testing_dataset,
+                         validation_steps=50
+                         )
+
+import matplotlib.pyplot as plt
+
+# summarize history for accuracy
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['Train', 'Validation'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['Train', 'Validation'], loc='upper left')
+plt.show()
