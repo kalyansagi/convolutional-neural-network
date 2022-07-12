@@ -1,0 +1,30 @@
+# convolutional-neural-networks
+
+== What does this application do?
+
+This is a simple python application to build a Convolutional Neural Network (ConvNet) to classify the given dataset (ConvNet_dataset), including the dog and cat images. This problem is a binary classification model, i.e., cat or dog (0 or 1). The used dataset (10,000 images) of dog and cat images is a subset of the original dataset (25,000 images) of Dogs vs. Cats of Kaggle competitions. The attached dataset is already prepared and labeled. The entire dataset (ConvNet_dataset) includes 10,000 Images that have the data split as follows:
+
+- test_set (8,000 Images)
+- cats (4,000 Images)
+- dogs (4,000 Images)
+- training_set (2,000 Images)
+- cats (1,000 Images)
+- dogs (1,000 Images)
+
+== Technical Details
+- Python Documentation: link:https://www.python.org/[Python]
+- Version control: git
+- IDE: Pycharm (Pure Python Project with venv)
+
+
+
+== Developer Guide to run the code locally
+==== `git clone https://github.com/kalyansagi/convolutional-neural-network.git`
+
+==== `cd /convolutional-neural-network`
+
+==== `git checkout master`
+
+
+
+

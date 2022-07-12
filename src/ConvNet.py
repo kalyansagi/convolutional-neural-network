@@ -7,6 +7,11 @@
 # Installing Tensorflow
 # Installing Keras
 
+
+# pip3 install tensorflow
+# pip3 install pillow
+# pip3 install scipy
+
 # Part 1 - Building the ConvNet
 
 # Importing the Keras libraries and packages
@@ -20,26 +25,64 @@ from keras.layers import Dense
 classifier = Sequential()
 
 # Step 1 - Building the Convolution Layer
-classifier.add(Convolution2D(32, 3, 3, input_shape = (64, 64, 3), activation = 'relu'))
+classifier.add(Convolution2D(32, (3, 3), input_shape=(64, 64, 3), activation='relu'))
 
 # Step 2 - Building the Pooling Layer
-classifier.add(MaxPooling2D(pool_size = (2, 2)))
+classifier.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Adding The Second Convolutional Layer
-classifier.add(Convolution2D(32, 3, 3, activation = 'relu'))
-classifier.add(MaxPooling2D(pool_size = (2, 2)))
+classifier.add(Convolution2D(32, 3, 3, activation='relu'))
+classifier.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Step 3 - Building the Flattening Layer
 classifier.add(Flatten())
 
 # Step 4 - Building the Fully Connected Layer
-classifier.add(Dense(output_dim = 128, activation = 'relu'))
-classifier.add(Dense(output_dim = 1, activation = 'sigmoid'))
+classifier.add(Dense(units=128, activation='relu'))
+classifier.add(Dense(units=1, activation='sigmoid'))
 
 # Compiling the ConvNet
-classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 # Part 2 - Fitting the ConvNet to the Images
-
 from keras.preprocessing.image import ImageDataGenerator
-# ..... Fill the Rest (a Few Lines of Code!)
+
+train_imagedatagenerator = ImageDataGenerator(
+    rescale=1. / 255,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True)
+test_imagedatagenerator = ImageDataGenerator(rescale=1. / 255)
+training_dataset = train_imagedatagenerator.flow_from_directory('training_set',
+                                                                target_size=(64, 64),
+                                                                batch_size=32,
+                                                                class_mode='binary')
+testing_dataset = test_imagedatagenerator.flow_from_directory('test_set',
+                                                              target_size=(64, 64),
+                                                              batch_size=32,
+                                                              class_mode='binary')
+history = classifier.fit(training_dataset,
+                         steps_per_epoch=(8000 / 32),
+                         epochs=75,
+                         validation_data=testing_dataset,
+                         validation_steps=50
+                         )
+
+import matplotlib.pyplot as plt
+
+# summarize history for accuracy
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['Train', 'Validation'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['Train', 'Validation'], loc='upper left')
+plt.show()
